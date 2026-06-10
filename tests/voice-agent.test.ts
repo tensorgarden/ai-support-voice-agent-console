@@ -37,3 +37,19 @@ describe("quality review", () => {
     expect((empathy?.score ?? 0)).toBeLessThan((accuracy?.score ?? 10));
   });
 });
+
+describe("silence gaps (latency)", () => {
+  it("all turns have silenceBeforeSeconds defined", () => {
+    expect(demoTranscript.every(t => t.silenceBeforeSeconds !== undefined)).toBe(true);
+  });
+  it("silence peaks >3s in turn 7 when caller frustration is highest", () => {
+    const peak = Math.max(...demoTranscript.map(t => t.silenceBeforeSeconds ?? 0));
+    expect(peak).toBeGreaterThan(3);
+    const t7 = demoTranscript.find(t => t.id === "t7");
+    expect(t7?.silenceBeforeSeconds).toBe(peak);
+  });
+  it("silence spikes correlate with frustration — turns 5-7 all exceed 2.5s", () => {
+    const midCall = demoTranscript.filter(t => ["t5", "t6", "t7"].includes(t.id));
+    expect(midCall.every(t => (t.silenceBeforeSeconds ?? 0) > 2.5)).toBe(true);
+  });
+});

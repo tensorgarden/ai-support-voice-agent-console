@@ -67,15 +67,20 @@ export default function Home() {
           <div className="space-y-3">
             {demoTranscript.map(turn => (
               <div key={turn.id} className={`rounded-2xl p-4 ${turn.speaker === "ai" ? "bg-indigo-50 border border-indigo-100 ml-4" : "bg-white border border-slate-200 mr-4"}`}>
-                <div className="flex items-center justify-between gap-2 text-xs mb-2">
-                  <span className={`font-semibold uppercase tracking-wide ${turn.speaker === "ai" ? "text-indigo-600" : "text-slate-500"}`}>
-                    {turn.speaker === "ai" ? "🤖 AI Assistant" : "📞 Caller"}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    {turn.intent && <IntentBadge intent={turn.intent} />}
-                    <span className="text-slate-400">{turn.timestamp}</span>
-                  </div>
-                </div>
+   <div className="flex items-center justify-between gap-2 text-xs mb-2">
+     <span className={`font-semibold uppercase tracking-wide ${turn.speaker === "ai" ? "text-indigo-600" : "text-slate-500"}`}>
+       {turn.speaker === "ai" ? "🤖 AI Assistant" : "📞 Caller"}
+     </span>
+     <div className="flex items-center gap-2">
+       {turn.intent && <IntentBadge intent={turn.intent} />}
+       <span className="text-slate-400">{turn.timestamp}</span>
+       {turn.silenceBeforeSeconds !== undefined && turn.silenceBeforeSeconds > 2.5 && (
+         <span className="rounded-md bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700" title={`${turn.silenceBeforeSeconds}s silence before reply`}>
+           ⏱ +{turn.silenceBeforeSeconds}s
+         </span>
+       )}
+     </div>
+   </div>
                 <p className="text-sm leading-6 text-slate-700">{turn.text}</p>
               </div>
             ))}

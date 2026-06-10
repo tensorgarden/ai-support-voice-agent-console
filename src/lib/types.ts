@@ -12,6 +12,8 @@ export interface SupportCall {
 export interface TranscriptTurn {
   id: string; callId: string; speaker: "ai" | "caller"; text: string;
   timestamp: string; intent?: IntentCategory; confidence?: number;
+  /** Seconds of silence before this turn began — the #1 latency pain point in voice AI */
+  silenceBeforeSeconds?: number;
 }
 
 export interface KBArticle {
