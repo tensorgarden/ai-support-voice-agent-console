@@ -42,6 +42,24 @@ describe("escalation rubric handoff", () => {
     expect(event.policySensitivity.toLowerCase()).toContain("payment");
     expect(event.riskFlags).toEqual(expect.arrayContaining(["payment dispute", "repeat contact"]));
   });
+
+  it("builds a handoff readiness packet so the specialist does not restart the call", () => {
+    const labels = event.handoffSummary.readinessChecklist.map(item => item.label);
+
+    expect(labels).toEqual(
+      expect.arrayContaining(["Customer identity", "Issue history", "Intent and sentiment", "Prior actions"])
+    );
+    expect(event.handoffSummary.readinessChecklist.filter(item => item.status === "ready")).toHaveLength(4);
+    expect(event.handoffSummary.readinessChecklist.some(item => item.evidence.includes("call_2801"))).toBe(true);
+  });
+
+  it("keeps unresolved compliance checks in review before the transfer", () => {
+    const reviewItem = event.handoffSummary.readinessChecklist.find(item => item.status === "needs_review");
+
+    expect(reviewItem?.label).toBe("Open compliance check");
+    expect(reviewItem?.evidence.toLowerCase()).toContain("processor status");
+    expect(event.handoffSummary.routingRationale.toLowerCase()).toContain("repeat contact");
+  });
 });
 
 describe("metrics", () => {

@@ -144,6 +144,20 @@ export default function Home() {
                     {e.handoffSummary.attemptedResolution.map(item => <li key={item}>{item}</li>)}
                   </ul>
                   <p className="mt-2"><strong>Next action:</strong> {e.handoffSummary.recommendedNextAction}</p>
+                  <p className="mt-2"><strong>Routing rationale:</strong> {e.handoffSummary.routingRationale}</p>
+                  <div className="mt-3 rounded-lg bg-amber-50 p-3">
+                    <p className="font-bold text-slate-950">Handoff readiness packet</p>
+                    <ul className="mt-2 space-y-1">
+                      {e.handoffSummary.readinessChecklist.map(item => (
+                        <li key={item.label} className="flex gap-2">
+                          <span className={`mt-0.5 rounded-full px-2 py-0.5 text-[10px] font-bold ${item.status === "ready" ? "bg-emerald-100 text-emerald-700" : "bg-amber-200 text-amber-900"}`}>
+                            {item.status === "ready" ? "ready" : "review"}
+                          </span>
+                          <span><strong>{item.label}:</strong> {item.evidence}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                   <p className="mt-2 text-amber-800"><strong>Risk flags:</strong> {e.riskFlags.join(", ")}</p>
                 </div>
                 <p className="mt-2 text-xs text-slate-400">At {e.atTimestamp}</p>

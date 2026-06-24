@@ -2,6 +2,7 @@ export type IntentCategory = "billing" | "technical" | "account" | "cancellation
 export type Sentiment = "calm" | "frustrated" | "angry";
 export type CallOutcome = "resolved" | "escalated" | "transferred" | "abandoned";
 export type EscalationAction = "continue" | "clarify" | "human_handoff" | "qa_review" | "immediate_alert";
+export type HandoffReadinessStatus = "ready" | "needs_review";
 export type RubricCategory = "clarity" | "accuracy" | "empathy" | "efficiency";
 
 export interface SentimentTimelineEntry {
@@ -43,11 +44,19 @@ export interface FrustrationAlert {
   callId: string; keywords: string[]; turnNumber: number; escalated: boolean;
 }
 
+export interface HandoffReadinessItem {
+  label: string; status: HandoffReadinessStatus; evidence: string;
+}
+
 export interface EscalationHandoffSummary {
   customerIssue: string;
   attemptedResolution: string[];
   missingInformation: string[];
   recommendedNextAction: string;
+  /** Why this call routes to a specific human team instead of a generic queue */
+  routingRationale: string;
+  /** Context packet used to prevent the customer repeating details after transfer */
+  readinessChecklist: HandoffReadinessItem[];
 }
 
 export interface EscalationEvent {

@@ -67,7 +67,15 @@ export const demoEscalationEvents: EscalationEvent[] = [
         "Identified KB-203 same-day reversal exception for charges over $200"
       ],
       missingInformation: ["Billing specialist must confirm refund processor status before promising exact deposit timing"],
-      recommendedNextAction: "Transfer to billing specialist with full context and process same-day reversal if payment processor status is clear."
+      recommendedNextAction: "Transfer to billing specialist with full context and process same-day reversal if payment processor status is clear.",
+      routingRationale: "Billing specialist required because this is a repeat contact with a post-cancellation payment dispute and KB-203 expedited refund exception.",
+      readinessChecklist: [
+        { label: "Customer identity", status: "ready", evidence: "Caller name, verified account email, phone number, and prior contact call_2801 are captured." },
+        { label: "Issue history", status: "ready", evidence: "Repeat contact after a promised refund from last week; current post-cancellation charge is $247.50." },
+        { label: "Intent and sentiment", status: "ready", evidence: "Billing intent at 0.88 confidence with frustration peaking at turn 6 after 'unacceptable'." },
+        { label: "Prior actions", status: "ready", evidence: "AI verified KB-142, found KB-203 exception eligibility, and generated REF-2847-JM." },
+        { label: "Open compliance check", status: "needs_review", evidence: "Specialist must confirm refund processor status before promising exact deposit timing." }
+      ]
     }
   }
 ];
