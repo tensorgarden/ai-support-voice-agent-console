@@ -155,6 +155,14 @@ export default function Home() {
                     <ul className="mt-1 list-disc pl-4 text-amber-900">
                       {e.handoffSummary.specialistOpeningBrief.unresolvedReviewPrompts.map(item => <li key={item}>{item}</li>)}
                     </ul>
+                    <p className="mt-2 font-semibold text-emerald-800">Already captured — do not re-ask:</p>
+                    <ul className="mt-1 list-disc pl-4 text-emerald-900">
+                      {e.handoffSummary.specialistOpeningBrief.noRepeatGuardrails.map(item => (
+                        <li key={item.capturedDetail}>
+                          <strong>{item.capturedDetail}:</strong> {item.reuseInstruction}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                   <div className="mt-3 rounded-lg bg-amber-50 p-3">
                     <p className="font-bold text-slate-950">Handoff readiness packet</p>

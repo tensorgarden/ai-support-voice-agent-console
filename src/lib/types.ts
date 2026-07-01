@@ -48,10 +48,17 @@ export interface HandoffReadinessItem {
   label: string; status: HandoffReadinessStatus; evidence: string;
 }
 
+export interface NoRepeatGuardrail {
+  capturedDetail: string;
+  reuseInstruction: string;
+}
+
 export interface SpecialistOpeningBrief {
   openingLine: string;
   repeatPreventionEvidence: string[];
   unresolvedReviewPrompts: string[];
+  /** Details already captured from AI conversation that the human should reuse instead of re-asking */
+  noRepeatGuardrails: NoRepeatGuardrail[];
 }
 
 export interface EscalationHandoffSummary {

@@ -86,6 +86,11 @@ export const demoEscalationEvents: EscalationEvent[] = [
         unresolvedReviewPrompts: [
           "Confirm processor status before stating an exact deposit time.",
           "Verify whether the prior promised refund from call_2801 created any duplicate reversal risk."
+        ],
+        noRepeatGuardrails: [
+          { capturedDetail: "Verified account email", reuseInstruction: "Use james.morrison@gmail.com from the handoff packet; do not ask James to repeat it unless processor lookup fails identity matching." },
+          { capturedDetail: "$247.50 post-cancellation charge", reuseInstruction: "Continue from the KB-203 same-day reversal exception; do not replay the standard refund script." },
+          { capturedDetail: "Prior support contact", reuseInstruction: "Reference call_2801 and REF-2847-JM; do not miss the repeat-contact acknowledgement before asking new questions." }
         ]
       }
     }

@@ -82,6 +82,24 @@ describe("escalation rubric handoff", () => {
     expect(prompts).toContain("processor status");
     expect(prompts).toContain("duplicate reversal risk");
   });
+
+  it("shows no-repeat guardrails for details already captured by the AI", () => {
+    const guardrails = event.handoffSummary.specialistOpeningBrief.noRepeatGuardrails;
+
+    expect(guardrails.map(item => item.capturedDetail)).toEqual(
+      expect.arrayContaining(["Verified account email", "$247.50 post-cancellation charge", "Prior support contact"])
+    );
+    expect(guardrails.some(item => item.reuseInstruction.toLowerCase().includes("do not ask"))).toBe(true);
+  });
+
+  it("keeps prior-call references in the no-repeat guardrail before new questions", () => {
+    const priorContactGuardrail = event.handoffSummary.specialistOpeningBrief.noRepeatGuardrails.find(
+      item => item.capturedDetail === "Prior support contact"
+    );
+
+    expect(priorContactGuardrail?.reuseInstruction).toContain("call_2801");
+    expect(priorContactGuardrail?.reuseInstruction).toContain("REF-2847-JM");
+  });
 });
 
 describe("metrics", () => {
