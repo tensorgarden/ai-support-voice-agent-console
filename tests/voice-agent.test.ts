@@ -403,6 +403,29 @@ describe("voice prompt injection screening", () => {
   });
 });
 
+describe('out-of-band audio injection screening', () => {
+  const screening = demoEscalationEvents[0].handoffSummary.highValueActionGate.outOfBandAudioInjectionScreening;
+
+  it('flags unattributed ambient speech at the sensitive-action turn', () => {
+    expect(screening.channel).toBe('ambient_speech');
+    expect(screening.status).toBe('suspected');
+    expect(screening.detectedAtTurnId).toBe('t8');
+    expect(screening.evidence.some(item => item.includes('t8'))).toBe(true);
+  });
+
+  it('keeps untrusted ambient audio out of model context and transcript text', () => {
+    expect(screening.admittedToModelContext).toBe(false);
+    expect(screening.storedAsTranscriptText).toBe(false);
+    expect(screening.evidence.some(item => item.includes('not copied into the transcript'))).toBe(true);
+  });
+
+  it('quarantines the out-of-band channel before the refund can resume', () => {
+    expect(screening.actionTaken).toBe('exclude_and_review');
+    expect(screening.reviewRequiredBeforeResume).toBe(true);
+    expect(demoEscalationEvents[0].handoffSummary.highValueActionGate.automatedActionBlocked).toBe(true);
+  });
+});
+
 describe("metrics", () => {
   it("total matches sum of outcomes", () => {
     expect(demoMetrics.resolvedCount + demoMetrics.escalatedCount).toBeLessThanOrEqual(demoMetrics.totalCalls);

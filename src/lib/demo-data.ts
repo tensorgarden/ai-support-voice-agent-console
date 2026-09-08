@@ -82,7 +82,7 @@ export const demoEscalationEvents: EscalationEvent[] = [
     riskScore: 6,
     recommendedAction: "human_handoff",
     policySensitivity: "Payment dispute with account-specific refund exception",
-    riskFlags: ["payment dispute", "repeat contact", "anger spike", "expedited refund exception", "voice prompt injection attempt"],
+    riskFlags: ["payment dispute", "repeat contact", "anger spike", "expedited refund exception", "voice prompt injection attempt", "out-of-band audio injection candidate"],
     handoffSummary: {
       customerIssue: "James was charged $247.50 two weeks after cancelling and has already contacted support once.",
       attemptedResolution: [
@@ -128,7 +128,8 @@ export const demoEscalationEvents: EscalationEvent[] = [
         unresolvedReviewPrompts: [
           "Confirm processor status before stating an exact deposit time.",
           "Verify whether the prior promised refund from call_2801 created any duplicate reversal risk.",
-          "Clear the voice prompt injection quarantine before resuming any refund action."
+          "Clear the voice prompt injection quarantine before resuming any refund action.",
+          "Review the unattributed ambient audio segment before resuming any refund action."
         ],
         noRepeatGuardrails: [
           { capturedDetail: "Verified account email", reuseInstruction: "Use the verified account lookup token from the handoff packet; do not ask James to repeat the address unless processor lookup fails identity matching." },
@@ -198,7 +199,8 @@ export const demoEscalationEvents: EscalationEvent[] = [
         requiredNextChecks: [
           "Complete a one-time code challenge through the authenticated account app.",
           "Confirm processor status and duplicate reversal risk before approval.",
-          "Security review must clear the quarantined voice prompt injection finding before the refund can resume."
+          "Security review must clear the quarantined voice prompt injection finding before the refund can resume.",
+          "Screen the out-of-band audio channel before any ambient speech can influence the refund decision."
         ],
         riskRationale: "Email and inbound caller number identify account context but do not independently authorize a $247.50 expedited refund.",
         callerAuthenticationBoundary: {
@@ -229,6 +231,19 @@ export const demoEscalationEvents: EscalationEvent[] = [
           detectedAtTurnId: "t8",
           quarantinedBeforeToolAction: true,
           actionTaken: "quarantine_for_review",
+          reviewRequiredBeforeResume: true
+        },
+        outOfBandAudioInjectionScreening: {
+          channel: "ambient_speech",
+          status: "suspected",
+          detectedAtTurnId: "t8",
+          evidence: [
+            "t8 audio contained a low-volume, non-primary speaker segment overlapping the caller's refund instruction.",
+            "The ambient segment had no reliable speaker attribution, so its wording was not copied into the transcript or model context."
+          ],
+          admittedToModelContext: false,
+          storedAsTranscriptText: false,
+          actionTaken: "exclude_and_review",
           reviewRequiredBeforeResume: true
         }
       }

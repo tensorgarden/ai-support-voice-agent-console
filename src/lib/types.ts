@@ -24,6 +24,9 @@ export type VulnerabilitySignalKind = "repeat_contact" | "financial_urgency" | "
 export type VulnerableCustomerCareStatus = "requires_specialist_care";
 export type VoicePromptInjectionStatus = "none_detected" | "suspected";
 export type InjectionQuarantineAction = "continue" | "quarantine_for_review";
+export type OutOfBandAudioChannel = "background_audio" | "hold_music" | "ambient_speech";
+export type OutOfBandAudioInjectionStatus = "clear" | "suspected";
+export type OutOfBandAudioAction = "continue" | "exclude_and_review";
 export type TranscriptSourceTrustKind = "agent_response" | "caller_request" | "caller_instruction_attempt" | "background_audio";
 export type TranscriptSourceTrustDisposition = "context_only" | "quarantined";
 export type SilenceGapStatus = "within_turn_window" | "cover_phrase_recommended" | "dead_air_risk";
@@ -227,6 +230,19 @@ export interface VoicePromptInjectionScreening {
   reviewRequiredBeforeResume: boolean;
 }
 
+export interface OutOfBandAudioInjectionScreening {
+  channel: OutOfBandAudioChannel;
+  status: OutOfBandAudioInjectionStatus;
+  /** Audio evidence is tied to the turn where an unattributed channel was detected */
+  detectedAtTurnId: string;
+  evidence: string[];
+  /** Unattributed audio cannot become an instruction in model context or transcript text */
+  admittedToModelContext: false;
+  storedAsTranscriptText: false;
+  actionTaken: OutOfBandAudioAction;
+  reviewRequiredBeforeResume: boolean;
+}
+
 export interface CallerAuthenticationBoundary {
   /** Voice biometric comparison is not accepted as an authentication factor */
   voiceBiometricAccepted: false;
@@ -253,6 +269,8 @@ export interface HighValueActionGate {
   paymentDataIsolation: PaymentDataIsolation;
   /** Spoken caller instructions are screened for prompt injection before any tool action executes */
   voicePromptInjectionScreening: VoicePromptInjectionScreening;
+  /** Background audio and ambient speech are screened before they can influence a sensitive action */
+  outOfBandAudioInjectionScreening: OutOfBandAudioInjectionScreening;
 }
 
 export interface EscalationHandoffSummary {
