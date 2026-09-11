@@ -308,6 +308,18 @@ export default function Home() {
                         <p>No injected spoken instructions detected.</p>
                       )}
                     </div>
+                    <div
+                      className="mt-2 rounded-md border border-orange-200 bg-orange-50/80 p-2"
+                      role="status"
+                      aria-label="Unattributed audio is excluded from model context and requires review"
+                    >
+                      <p className="font-semibold">Out-of-band audio screen · {e.handoffSummary.highValueActionGate.outOfBandAudioInjectionScreening.status.replaceAll("_", " ")}</p>
+                      <p className="mt-1"><strong>Channel:</strong> {e.handoffSummary.highValueActionGate.outOfBandAudioInjectionScreening.channel.replaceAll("_", " ")} · detected at {e.handoffSummary.highValueActionGate.outOfBandAudioInjectionScreening.detectedAtTurnId}</p>
+                      <ul className="mt-1 list-disc pl-4">
+                        {e.handoffSummary.highValueActionGate.outOfBandAudioInjectionScreening.evidence.map(item => <li key={item}>{item}</li>)}
+                      </ul>
+                      <p className="mt-1"><strong>Action:</strong> {e.handoffSummary.highValueActionGate.outOfBandAudioInjectionScreening.actionTaken.replaceAll("_", " ")} · review required before resume.</p>
+                    </div>
                     <div className="mt-2 rounded-md border border-red-200 bg-white/70 p-2">
                       <p className="font-semibold">Payment-data boundary · {e.handoffSummary.highValueActionGate.paymentDataIsolation.captureChannel.replaceAll("_", " ")}</p>
                       <p>Model, transcript, and call recording access: blocked before capture.</p>
