@@ -48,6 +48,13 @@ This project demonstrates the counter-pattern: a voice agent that actually works
 - **Supervisor dashboard**: Call volume, resolution rate, escalation rate, average CSAT, calls-by-intent breakdown
 - **Call quality review**: Per-call rubric scoring across clarity, accuracy, empathy, and efficiency. Reviewer notes explain why empathy scored lower than accuracy
 - **Knowledge base**: Three articles covering cancellation policy, refund exceptions, and account verification
+- **Latency-aware silence handling**: Classifies sub-700ms gaps, recommends an honest progress update before dead air, and routes two-second gaps toward callback or human handoff
+
+### Latency-aware silence handling
+
+Voice support quality is shaped by perceived latency, not only answer accuracy. A long unexplained pause can make callers think the system failed or disconnect before the response arrives. This demo keeps the response honest: short gaps stay inside the turn-taking window, gaps from 0.7 seconds recommend a truthful progress update, and gaps at 2 seconds or more become a callback or human-handoff risk. It does not fabricate background work or hide a stalled call.
+
+Reference: [Latency in Conversational Voice Agents](https://callin.io/blogs/reduce-perceived-latency-in-ai-voice-agents).
 
 ## Tech stack
 
